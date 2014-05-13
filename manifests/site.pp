@@ -1,5 +1,5 @@
 
-import "node.pp"
+import "nodes/node.pp"
 import "templates.pp"
 
 

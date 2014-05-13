@@ -3,7 +3,7 @@
 
 
 Vagrant.configure("2") do |config|
-  config.vm.box = "hashicorp/precise64"
+  config.vm.box = "ubuntu/trusty64"
 
   config.vm.provision :puppet, :module_path => %w(modules) do |puppet|
   # fix `fqdn_rand` error
@@ -19,7 +19,7 @@ config.vm.box_check_update = false
 # ****************** haproxy ***************
 
   config.vm.define "haproxy", autostart: false  do |haproxy|
-    config.vm.box = "hashicorp/precise64"
+    config.vm.box = "ubuntu/trusty64"
     config.vm.hostname = 'haproxy-dev-001'
     config.vm.network "private_network", ip: "192.168.100.10",
        virtualbox__intnet: true
@@ -33,7 +33,7 @@ config.vm.box_check_update = false
 # ****************** web ***************
 
   config.vm.define "web", primary: true  do |web|
-    config.vm.box = "hashicorp/precise64"
+    config.vm.box = "ubuntu/trusty64"
     config.vm.box_check_update = true
     config.vm.hostname = 'web-dev-001'
     config.vm.network "forwarded_port", guest: 80, host: 1080
@@ -50,7 +50,7 @@ config.vm.box_check_update = false
 # ***************** mongo *****************
 
   config.vm.define "mongo" , autostart: false do |mongo|
-    config.vm.box = "hashicorp/precise64"
+    config.vm.box = "ubuntu/trusty64"
     config.vm.box_check_update = true
     config.vm.hostname = 'db-dev-001'
     config.vm.network "private_network", ip: "192.168.100.30",
@@ -68,7 +68,7 @@ config.vm.box_check_update = false
 # ***************** mysql *****************
 
   config.vm.define "mysql" , autostart: false do |mongo|
-    config.vm.box = "hashicorp/precise64"
+    config.vm.box = "ubuntu/trusty64"
     config.vm.hostname = 'mysql-dev-001'
     config.vm.network "private_network", ip: "192.168.100.40",
        virtualbox__intnet: true
@@ -82,7 +82,7 @@ config.vm.box_check_update = false
 # ***************** auth *****************
 
   config.vm.define "auth" , autostart: false do |mongo|
-    config.vm.box = "hashicorp/precise64"
+    config.vm.box = "ubuntu/trusty64"
     config.vm.hostname = 'auth-dev-001'
     config.vm.network "private_network", ip: "192.168.100.50",
        virtualbox__intnet: true
@@ -96,7 +96,7 @@ config.vm.box_check_update = false
 # ***************** log *****************
 
   config.vm.define "log" , autostart: false do |mongo|
-    config.vm.box = "hashicorp/precise64"
+    config.vm.box = "ubuntu/trusty64"
     config.vm.hostname = 'log-dev-001'
     config.vm.network "private_network", ip: "192.168.100.60",
        virtualbox__intnet: true
@@ -109,7 +109,7 @@ config.vm.box_check_update = false
 # ***************** monitor *****************
 
   config.vm.define "monitor" , autostart: false do |mongo|
-    config.vm.box = "hashicorp/precise64"
+    config.vm.box = "ubuntu/trusty64"
     config.vm.hostname = 'monitor-dev-001'
     config.vm.network "private_network", ip: "192.168.100.70",
        virtualbox__intnet: true
