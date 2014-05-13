@@ -36,28 +36,3 @@ host { 'command': ip => '192.168.100.90', host_aliases => 'command.local', }
 
 
 }
-
-
-class dev_config {
-
-notify {"Node is a ****** DEV ******* environment":}
-
-
-
-}
-
-class prod_config {
-
-notify {"Node is a ****** PROD ******* enviroment":}
-
-
-}
-
-class test_config {
-
-
-notify {"Node is a ****** TST ******* enviroment":}
-
-
-
-}

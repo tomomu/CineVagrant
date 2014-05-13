@@ -1,33 +1,4 @@
 
-############ Prod environments  ###########
-
-
-if $hostname =~ /-prd-(\d+)/ {
-
-include prod_config
-
-}
-
-
-############ dev environments  ###########
-
-
-if $hostname =~ /-dev-(\d+)/ {
-
-include dev_config
-
-}
-
-
-
-
-############ test  environments  ###########
-
-if $hostname =~ /-tst-(\d+)/ {
-
-include test_config
-
-}
 
 
 #################### web servers #####################
@@ -128,56 +99,5 @@ file { "/etc/uwsgi/apps-enabled/uwsgi-platform.conf":
 }
 
 
-
-}
-
-
-#################### haproxy servers #####################
-
-if $hostname =~ /^haproxy-(prd|dev|tst)-(\d+)/ {
-
-  package { haproxy: ensure => "installed" }
-
-}
-
-#################### mongo servers #####################
-
-if $hostname =~ /^mongo-(prd|dev|tst)-(\d+)/ {
-
-
-
-class {'::mongodb::server':
- auth => true,
- logappend => 'false',
-}
-
-mongodb::db { 'cineglass':
- user          => 'test',
- password => 'cinetest',
-}
-
-
-
-}
-
-#################### monitor servers #####################
-
-
-if $hostname =~ /^monitor-(prd|dev|tst)-(\d+)/ {
-
-
-
-}
-
-#################### mysql servers #####################
-
-if $hostname =~ /^mysql-(prd|dev|tst)-(\d+)/ {
-
-
-}
-
-#################### monitor servers #####################
-
-if $hostname =~ /^log-(prd|dev|tst)-(\d+)/ {
 
 }
