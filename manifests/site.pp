@@ -1,12 +1,11 @@
 
-
-
-
-import "nodes/*.pp"
+import "node.pp"
 import "templates.pp"
 
 
+
 include common
+include vagrant
 
 
 exec { "apt-update":

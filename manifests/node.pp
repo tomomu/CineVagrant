@@ -36,7 +36,7 @@ if $hostname =~ /^web-(prd|dev|tst)-(\d+)/ {
 
 
 # node, grunt, curl, yoeman,
-$web_pkg = [ "node",  "ssl-cert","uwsgi-plugin-python", "python-pip", "npm", "mongodb-clients",  "python-virtualenv", "virtualenvwrapper", "nginx-full", "uwsgi" ]
+$web_pkg = [ "node",  "ssl-cert","uwsgi-plugin-python", "python-pip", "npm", "mongodb-clients",  "python-virtualenv", "virtualenvwrapper", "nginx-full", "uwsgi", "python-dev",]
 
 
 package { $web_pkg: ensure => "installed" }
