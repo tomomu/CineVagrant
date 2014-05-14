@@ -52,7 +52,7 @@ config.vm.box_check_update = false
   config.vm.define "mongo" , autostart: false do |mongo|
     config.vm.box = "ubuntu/trusty64"
     config.vm.box_check_update = true
-    config.vm.hostname = 'db-dev-001'
+    config.vm.hostname = 'mongo-dev-001'
     config.vm.network "private_network", ip: "192.168.100.30",
        virtualbox__intnet: true
     config.vm.network "forwarded_port", guest: 27017, host: 27017,  auto_correct: true
@@ -111,6 +111,7 @@ config.vm.box_check_update = false
   config.vm.define "monitor" , autostart: false do |mongo|
     config.vm.box = "ubuntu/trusty64"
     config.vm.hostname = 'monitor-dev-001'
+
     config.vm.network "private_network", ip: "192.168.100.70",
        virtualbox__intnet: true
     config.vm.provider "virtualbox" do |v|

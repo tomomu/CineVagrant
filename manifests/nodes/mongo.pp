@@ -5,17 +5,18 @@
 if $hostname =~ /^mongo-(prd|dev|tst)-(\d+)/ {
 
 
-
-class {'::mongodb::server':
- auth => true,
- logappend => 'false',
-}
-
-mongodb::db { 'cineglass':
- user          => 'test',
- password => 'cinetest',
+class { 'mongodb':
 }
 
 
+#### create test users  ####
+
+
+mongodb::user { 'cineglass':
+  password => 'brokengla$$',
+}
+mongodb::user { 'graylog':
+  password => '2gray2',
+}
 
 }
