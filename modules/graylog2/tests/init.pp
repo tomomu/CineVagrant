@@ -1,4 +1,1 @@
-# Default class installation
-#
-class { 'graylog2':
-}
+include graylog2

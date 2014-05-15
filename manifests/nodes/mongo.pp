@@ -4,19 +4,25 @@
 
 if $hostname =~ /^mongo-(prd|dev|tst)-(\d+)/ {
 
-
-class { 'mongodb':
+class {'::mongodb::server':
+  auth => true,
 }
 
 
-#### create test users  ####
 
 
-mongodb::user { 'cineglass':
-  password => 'brokengla$$',
+mongodb::db { 'testdb':
+  user          => 'logger',
+  password => 'frogger',
 }
-mongodb::user { 'graylog':
-  password => '2gray2',
+
+
+package { 'genghisapp':
+    ensure   => 'installed',
+    provider => 'gem',
 }
+
+
+
 
 }

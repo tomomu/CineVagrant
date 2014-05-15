@@ -1,4 +1,1 @@
-# Default class installation
-#
-class { 'mongodb':
-}
+class { '::mongodb': }

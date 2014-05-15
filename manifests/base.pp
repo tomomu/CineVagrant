@@ -5,11 +5,39 @@ class common {
 
     include vagrant
 
-    $base_pkg = [ "ntp", "git", "vim", "curl", ]
-
+    $base_pkg = [ "ntp", "git", "vim", "curl", "ruby-dev", ]
     package { $base_pkg: ensure => "installed" }
 
-    service { "ntp": ensure => running, }
+
+
+    # Install database bindings, and clients
+
+   include '::mysql::client'
+   include '::mysql::bindings'
+   package { "mongodb-clients": ensure => "installed" }
+
+
+
+
+file { "/etc/puppet/hiera.yaml":
+  #  require => Directory["/etc/puppet"],
+    ensure => "file",
+    content => '---
+        :backends:
+          - yaml
+
+        :logger: console
+
+        :hierarchy:
+          - "%{operatingsystem}"
+          - common
+
+        :yaml:
+           :datadir: /etc/puppet/hieradata
+        '
+}
+
+
 
 }
 

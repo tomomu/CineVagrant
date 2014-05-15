@@ -96,7 +96,7 @@ config.vm.box_check_update = false
 # ***************** log *****************
 
   config.vm.define "log" , autostart: false do |mongo|
-    config.vm.box = "ubuntu/trusty64"
+    config.vm.box = "hashicorp/precise64"
     config.vm.hostname = 'log-dev-001'
     config.vm.network "private_network", ip: "192.168.100.60",
        virtualbox__intnet: true

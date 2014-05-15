@@ -6,37 +6,49 @@
 if $hostname =~ /^web-(prd|dev|tst)-(\d+)/ {
 
 
-# node, grunt, curl, yoeman,
-$web_pkg = [ "node",  "ssl-cert","uwsgi-plugin-python", "python-pip", "npm", "mongodb-clients",  "python-virtualenv", "virtualenvwrapper", "nginx-full", "uwsgi", "python-dev",]
+######### Install deb pkgs
+
+
+$web_pkg = [ "node",  "ssl-cert","uwsgi-plugin-python", "python-pip", "npm","nodejs", "nodejs-legacy", "python-virtualenv", "virtualenvwrapper","nginx-full", "uwsgi", "python-dev",]
 
 
 package { $web_pkg: ensure => "installed" }
+
+# install gem pkgs
+
+$gem_pkg = [  "compass",  ]
+package { $gem_pkg: ensure   => 'installed', provider => 'gem', }
+
+######## install node pkgs
+
+$npm_pkg = [  "yo", "generator-angular", "grunt-cli",  ]
+
+package { $npm_pkg: ensure   => 'installed',
+                    provider => 'npm',
+                    require => Package["npm"]
+}
+
+
+
+######### Install web servers
 
 
 service { "nginx":
 #    require => Package["nginx-full"],
     ensure => running,
     enable => true,
+    require => Package["nginx-full"],
 }
 
 service { "uwsgi":
   #  require => Package["uwsgi"],
     ensure => running,
     enable => true,
+    require => Package["uwsgi"],
 }
 
 
 
-
-
-file { "/vagrant/web/ui/default.html":
-    require => File["/vagrant/web/ui/"],
-    ensure => "file",
-    content => "<!DOCTYPE html>
-        <html><body>
-        Hello, world.
-        "
-}
 
 
 file { "/vagrant/web/conf/nginx-ui.conf":

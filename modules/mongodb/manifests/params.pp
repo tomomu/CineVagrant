@@ -1,86 +1,93 @@
-# Class: mongodb::params
-#
-# This class defines default parameters used by the main module class mongodb
-# Operating Systems differences in names and paths are addressed here
-#
-# == Variables
-#
-# Refer to mongodb class for the variables defined here.
-#
-# == Usage
-#
-# This class is not intended to be used directly.
-# It may be imported or inherited by other classes
-#
-class mongodb::params {
+# PRIVATE CLASS: do not use directly
+class mongodb::params inherits mongodb::globals {
+  $ensure           = true
+  $service_status   = $service_status
+  $ensure_client    = true
 
-  ### Application related parameters
+  # Amazon Linux's OS Family is 'Linux', operating system 'Amazon'.
+  case $::osfamily {
+    'RedHat', 'Linux': {
 
-  $use_10gen = false
-  $dependency_class = 'mongodb::dependency'
-  $bind_ip = '127.0.0.1'
-  $client_only = false
-  $package_client = ''
-  $keyfile = ''
+      if $mongodb::globals::manage_package_repo {
+        $user        = pick($user, 'mongod')
+        $group       = pick($group, 'mongod')
+        if $::mongodb::globals::version {
+          $server_package_name = "mongo-10gen-server-${::mongodb::globals::version}"
+          $client_package_name = "mongo-10gen-${::mongodb::globals::version}"
+        } else {
+          $server_package_name = 'mongo-10gen-server'
+          $client_package_name = 'mongo-10gen'
+        }
+        $service_name = pick($service_name, 'mongod')
+        $config      = '/etc/mongod.conf'
+        $dbpath      = '/var/lib/mongo'
+        $logpath     = '/var/log/mongo/mongod.log'
+        $pidfilepath = '/var/run/mongodb/mongod.pid'
+        $bind_ip     = pick($bind_ip, ['127.0.0.1'])
+        $fork        = true
+      } else {
+        # RedHat/CentOS doesn't come with a prepacked mongodb
+        # so we assume that you are using EPEL repository.
+        $user                = pick($user, 'mongodb')
+        $group               = pick($group, 'mongodb')
+        $server_package_name = pick($server_package_name, 'mongodb-server')
+        $client_package_name = pick($client_package_name, 'mongodb')
 
-  ### Names depend on use_10gen and are defined in the main class
-  $package = ''
-  $service = ''
-  $config_file = ''
-  $data_dir = ''
-  $log_dir = ''
-  $log_file = ''
-  $pid_file = ''
-  $process_user = ''
-
-  $service_status = $::operatingsystem ? {
-    default => true,
+        $service_name        = pick($service_name, 'mongod')
+        $config              = '/etc/mongodb.conf'
+        $dbpath              = '/var/lib/mongodb'
+        $logpath             = '/var/log/mongodb/mongodb.log'
+        $bind_ip             = pick($bind_ip, ['127.0.0.1'])
+        $pidfilepath         = '/var/run/mongodb/mongodb.pid'
+        $fork                = true
+        $journal             = true
+      }
+    }
+    'Debian': {
+      if $mongodb::globals::manage_package_repo {
+        $user  = pick($user, 'mongodb')
+        $group = pick($group, 'mongodb')
+        if $::mongodb::globals::version {
+          $server_package_name = "mongodb-10gen-${::mongodb::globals::version}"
+        } else {
+          $server_package_name = 'mongodb-10gen'
+        }
+        $service_name = 'mongodb'
+        $config       = '/etc/mongodb.conf'
+        $dbpath       = '/var/lib/mongodb'
+        $logpath      = '/var/log/mongodb/mongodb.log'
+        $bind_ip      = ['127.0.0.1']
+      } else {
+        # although we are living in a free world,
+        # I would not recommend to use the prepacked
+        # mongodb server on Ubuntu 12.04 or Debian 6/7,
+        # because its really outdated
+        $user                = pick($user, 'mongodb')
+        $group               = pick($group, 'mongodb')
+        $server_package_name = pick($server_package_name, 'mongodb-server')
+        $client_package_name = pick($client_package_name, 'mongodb')
+        $service_name        = pick($service_name, 'mongodb')
+        $config              = '/etc/mongodb.conf'
+        $dbpath              = '/var/lib/mongodb'
+        $logpath             = '/var/log/mongodb/mongodb.log'
+        $bind_ip             = pick($bind_ip, ['127.0.0.1'])
+        $pidfilepath         = undef
+      }
+      # avoid using fork because of the init scripts design
+      $fork = undef
+    }
+    default: {
+      fail("Osfamily ${::osfamily} and ${::operatingsystem} is not supported")
+    }
   }
 
-  $process = 'mongod'
-
-  $process_args = ''
-
-  $config_file_mode = $::operatingsystem ? {
-    default => '0644',
+  case $::operatingsystem {
+    'Ubuntu': {
+      $service_provider = pick($service_provider, 'upstart')
+    }
+    default: {
+      $service_provider = undef
+    }
   }
-
-  $config_file_owner = $::operatingsystem ? {
-    default => 'root',
-  }
-
-  $config_file_group = $::operatingsystem ? {
-    default => 'root',
-  }
-
-  $port = '27017'
-  $protocol = 'tcp'
-
-  # General Settings
-  $my_class = ''
-  $source = ''
-  $source_dir = ''
-  $source_dir_purge = false
-  $template = ''
-  $options = ''
-  $service_autorestart = true
-  $version = 'present'
-  $absent = false
-  $disable = false
-  $disableboot = false
-
-  ### General module variables that can have a site or per module default
-  $monitor = false
-  $monitor_tool = ''
-  $monitor_target = ''
-  $firewall = false
-  $firewall_tool = ''
-  $firewall_src = '0.0.0.0/0'
-  $firewall_dst = ''
-  $puppi = false
-  $puppi_helper = 'standard'
-  $debug = false
-  $audit_only = false
-  $noops = undef
 
 }
