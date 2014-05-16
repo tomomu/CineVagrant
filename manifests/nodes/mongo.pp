@@ -11,7 +11,7 @@ class {'::mongodb::server':
 
 
 
-mongodb::db { 'testdb':
+mongodb::db { 'zabbix':
   user          => 'logger',
   password => 'frogger',
 }

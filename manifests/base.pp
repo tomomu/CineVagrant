@@ -1,5 +1,10 @@
 
 
+
+stage { 'pre':
+  before => Stage["main"],
+}
+
 class common {
 
 
@@ -19,27 +24,19 @@ class common {
 
 
 
-file { "/etc/puppet/hiera.yaml":
-  #  require => Directory["/etc/puppet"],
-    ensure => "file",
-    content => '---
-        :backends:
-          - yaml
+#### Zabbix monitoring, move to production tier later
 
-        :logger: console
-
-        :hierarchy:
-          - "%{operatingsystem}"
-          - common
-
-        :yaml:
-           :datadir: /etc/puppet/hieradata
-        '
+class { 'zabbixagent':
+  servers  => '192.168.100.70',
+  hostname => 'monitor',
 }
 
 
 
 }
+
+
+
 
 class vagrant{
 
